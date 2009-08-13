@@ -2,7 +2,7 @@ package Net::APNS;
 
 use Moose;
 use Net::APNS::Notification;
-our $VERSION = '0.01';
+our $VERSION = '0.0101';
 
 sub notify {
     my ($self, $args) = @_;
@@ -32,7 +32,10 @@ Net::APNS - Apple Push Notification Service for perl.
       key    => "key.pem",
       passwd => "pass"
   });
-
+  $Notifier->devicetoken("....");
+  $Notifier->message("message");
+  $Notifier->badge(4);
+  $Notifier->write;
 =head1 DESCRIPTION
 
 Net::APNS is Apple Push Notification Service.
