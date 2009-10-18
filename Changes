@@ -1,4 +1,8 @@
 Revision history for Perl extension Net::APNS
+0.02    Sun Oct 19 07:20:21 2009 
+        - Change Moose to Any::Moose
+        - Rewrite pod
+
 0.0101  Thu Aug 13 22:38:43 2009
         - add notification.pm
 
