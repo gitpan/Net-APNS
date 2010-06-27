@@ -1,30 +1,19 @@
 #line 1
-package Test::Moose;
+package Test::Mouse;
 
-use strict;
-use warnings;
+use Mouse::Exporter;
+use Mouse::Util qw(does_role find_meta);
 
-use Sub::Exporter;
 use Test::Builder;
 
-use List::MoreUtils 'all';
-use Moose::Util 'does_role', 'find_meta';
-
-our $VERSION   = '1.08';
-$VERSION = eval $VERSION;
-our $AUTHORITY = 'cpan:STEVAN';
-
-my @exports = qw[
-    meta_ok
-    does_ok
-    has_attribute_ok
-    with_immutable
-];
-
-Sub::Exporter::setup_exporter({
-    exports => \@exports,
-    groups  => { default => \@exports }
-});
+Mouse::Exporter->setup_import_methods(
+    as_is => [qw(
+        meta_ok
+        does_ok
+        has_attribute_ok
+        with_immutable
+    )],
+);
 
 ## the test builder instance ...
 
@@ -32,7 +21,7 @@ my $Test = Test::Builder->new;
 
 ## exported functions
 
-sub meta_ok ($;$) {
+sub meta_ok ($;$) { ## no critic
     my ($class_or_obj, $message) = @_;
 
     $message ||= "The object has a meta";
@@ -45,7 +34,7 @@ sub meta_ok ($;$) {
     }
 }
 
-sub does_ok ($$;$) {
+sub does_ok ($$;$) { ## no critic
     my ($class_or_obj, $does, $message) = @_;
 
     $message ||= "The object does $does";
@@ -58,7 +47,7 @@ sub does_ok ($$;$) {
     }
 }
 
-sub has_attribute_ok ($$;$) {
+sub has_attribute_ok ($$;$) { ## no critic
     my ($class_or_obj, $attr_name, $message) = @_;
 
     $message ||= "The object does has an attribute named $attr_name";
@@ -73,19 +62,22 @@ sub has_attribute_ok ($$;$) {
     }
 }
 
-sub with_immutable (&@) {
+sub with_immutable (&@) { ## no critic
     my $block = shift;
+
     my $before = $Test->current_test;
+
     $block->();
     $_->meta->make_immutable for @_;
     $block->();
+
     my $num_tests = $Test->current_test - $before;
-    return all { $_ } ($Test->summary)[-$num_tests..-1];
+
+    return !grep{ !$_ } ($Test->summary)[-$num_tests .. -1];
 }
 
 1;
-
 __END__
 
-#line 183
+#line 133
 

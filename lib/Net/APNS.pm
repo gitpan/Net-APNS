@@ -1,8 +1,13 @@
 package Net::APNS;
-
-use Any::Moose;
+use strict;
+use warnings;
 use Net::APNS::Notification;
-our $VERSION = '0.02';
+use Sub::Exporter -setup => {
+    exports => [ qw/notify/ ],
+};
+our $VERSION = '0.0201';
+
+sub new { bless {}, $_[0]; }
 
 sub notify {
     my ( $self, $args ) = @_;
@@ -13,7 +18,7 @@ sub notify {
     );
 }
 
-__PACKAGE__->meta->make_immutable;
+1;
 __END__
 
 =head1 NAME

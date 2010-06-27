@@ -4,13 +4,10 @@ author:
   - 'haoyayoi <st.hao.yayoi@gmail.com>'
 build_requires:
   ExtUtils::MakeMaker: 6.42
-  Test::Class: 0
-  Test::Moose: 0
-  Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.91'
+generated_by: 'Module::Install version 0.99'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -23,8 +20,10 @@ no_index:
     - xt
 requires:
   Any::Moose: 0.10
+  Filter::Util::Call: 0
   JSON::XS: 2.25
   Net::SSLeay: 1.35
+  Sub::Exporter: 0.982
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.02
+version: 0.0201
