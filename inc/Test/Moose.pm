@@ -1,5 +1,11 @@
 #line 1
 package Test::Moose;
+BEGIN {
+  $Test::Moose::AUTHORITY = 'cpan:STEVAN';
+}
+BEGIN {
+  $Test::Moose::VERSION = '2.0205';
+}
 
 use strict;
 use warnings;
@@ -9,10 +15,6 @@ use Test::Builder;
 
 use List::MoreUtils 'all';
 use Moose::Util 'does_role', 'find_meta';
-
-our $VERSION   = '1.08';
-$VERSION = eval $VERSION;
-our $AUTHORITY = 'cpan:STEVAN';
 
 my @exports = qw[
     meta_ok
@@ -77,7 +79,7 @@ sub with_immutable (&@) {
     my $block = shift;
     my $before = $Test->current_test;
     $block->();
-    $_->meta->make_immutable for @_;
+    Class::MOP::class_of($_)->make_immutable for @_;
     $block->();
     my $num_tests = $Test->current_test - $before;
     return all { $_ } ($Test->summary)[-$num_tests..-1];
@@ -85,7 +87,13 @@ sub with_immutable (&@) {
 
 1;
 
+# ABSTRACT: Test functions for Moose specific features
+
+
+
+#line 187
+
+
 __END__
 
-#line 183
 

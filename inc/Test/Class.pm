@@ -12,7 +12,7 @@ use Storable qw(dclone);
 use Test::Builder;
 use Test::Class::MethodInfo;
 
-our $VERSION = '0.35';
+our $VERSION = '0.36';
 
 my $Check_block_has_run;
 {
@@ -37,6 +37,7 @@ sub builder { $Builder };
 
 
 my $Tests = {};
+my @Filters = ();
 
 
 my %_Test;  # inside-out object field indexed on $self
@@ -144,8 +145,18 @@ sub _get_methods {
 	
 	my %methods = ();
 	foreach my $class ( @{mro::get_linear_isa( $test_class )} ) {
+      FILTER:
 		foreach my $info ( _methods_of_class( $self, $class ) ) {
 		    my $name = $info->name;
+
+            if ( $info->type eq TEST ) {
+                # determine if method is filtered, true if *any* filter
+                # returns false.
+                foreach my $filter ( @Filters ) {
+                    next FILTER unless $filter->( $class, $name );
+                }
+            }
+
 			foreach my $type ( @types ) {
 			    if ( $info->is_type( $type ) ) {
     				$methods{ $name } = 1 
@@ -412,6 +423,16 @@ sub SKIP_ALL {
 	$Builder->skip( $reason ) 
 	    until $Builder->current_test >= $last_test;
 	exit(0);
+}
+
+sub add_filter {
+    my ( $class, $cb ) = @_;
+
+    if ( not ref $cb eq 'CODE' ) {
+        croak "Filter isn't a code-ref"
+    }
+
+    push @Filters, $cb;
 }
 
 1;

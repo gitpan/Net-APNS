@@ -70,14 +70,14 @@ sub with_immutable (&@) { ## no critic
     $block->();
     $_->meta->make_immutable for @_;
     $block->();
+    return if not defined wantarray;
 
     my $num_tests = $Test->current_test - $before;
-
     return !grep{ !$_ } ($Test->summary)[-$num_tests .. -1];
 }
 
 1;
 __END__
 
-#line 133
+#line 132
 
